@@ -4,8 +4,8 @@ WORKDIR /golang
 
 COPY ./golang /golang
 
-RUN go install .
+RUN build -o testing
 
-CMD ["/golang/main"]
+CMD ["testing"]
 
 EXPOSE 4000 4001 4002 4003 4004 4005
