@@ -86,7 +86,7 @@ services:
  mongo-express:
   image: mongo-express
   container_name: "mongo-express"
-  restart: unless-stopped
+  restart: always
   tty: true
   ports:
    - 8081:8081
