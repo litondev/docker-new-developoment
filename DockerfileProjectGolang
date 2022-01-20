@@ -1,0 +1,11 @@
+FROM golang:1.17
+
+WORKDIR /golang
+
+COPY ./golang /golang
+
+RUN go install .
+
+CMD ["/golang/main"]
+
+EXPOSE 4000 4001 4002 4003 4004 4005

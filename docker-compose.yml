@@ -1,0 +1,101 @@
+version: '3'
+services:
+
+ project-go:
+  build:
+   context: .
+   dockerfile: DockerfileProjectGolang
+  image: project-golang
+  container_name: project-golang
+  ports:
+   - "4000:4000"
+   - "4001:4001"
+   - "4002:4002"
+   - "4003:4003"
+   - "4004:4004"
+   - "4005:4005"
+  volumes:
+   - ./Project:/Project 
+     
+ project-php:
+  build:
+   context: .
+   dockerfile: DockerfileProjectPhp
+  image: project-php
+  container_name: project-php
+  ports:
+   - "9000:9000"   
+   - "9001:9001"
+   - "9002:9002"
+   - "9003:9003"
+   - "9004:9004"
+   - "9005:9005"
+  working_dir: /Project
+  volumes:
+   - ./Project:/Project
+   - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    
+ project-node:
+  build:
+   context: .
+   dockerfile: DockerfileProjectNode
+  image: project-node
+  container_name: project-node
+  ports:
+   - "3000:3000"
+   - "3001:3001"       
+   - "3002:3002"
+   - "3003:3003"
+   - "3005:3005"
+  volumes:
+   - ./Project:/Project
+    
+ database_my:
+  image: mysql:5.7.22
+  container_name: database_my
+  ports:
+   - "3306:3306"
+  environment:
+   MYSQL_DATABASE: testing
+   MYSQL_ROOT_PASSWORD: root
+  volumes:
+   - ./database_my:/var/lib/mysql/
+   - ./mysql/my.cnf:/etc/mysql/my.cnf  
+
+ database_ps:
+  image: postgres:10-alpine
+  container_name: database_ps
+  ports:
+   - "5432:5432"
+  environment:   
+   POSTGRES_PASSWORD: root
+   POSTGRES_DB: testing  
+  volumes:    
+   - ./database_ps:/var/lib/postgresql/data
+
+ database_mo:
+  image: mongo:4.4
+  container_name: database_mo
+  ports: 
+   - "27017:27017"
+  environment:
+   MONGO_INITDB_ROOT_USERNAME: root
+   MONGO_INITDB_ROOT_PASSWORD: root
+  volumes:
+   - "./database_mo:/data/db"
+
+ mongo-express:
+  image: mongo-express
+  container_name: "mongo-express"
+  ports:
+   - 8081:8081
+  environment:
+   ME_CONFIG_MONGODB_ADMINUSERNAME: root
+   ME_CONFIG_MONGODB_ADMINPASSWORD: root
+   ME_CONFIG_MONGODB_URL: mongodb://root:root@database_mo:27017/
+
+ adminer:
+  image: adminer
+  container_name: adminer  
+  ports:
+   - 8082:8080
